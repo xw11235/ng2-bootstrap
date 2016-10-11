@@ -9,32 +9,32 @@ const MouseEvent = (global as any).MouseEvent as MouseEvent;
 
 /* tslint:disable:component-selector-name */
 @Component({
-  selector: 'accordion-group, accordion-panel',
+  selector: 'accordion-group, accordion-card',
   template: `
-    <div class="panel" [ngClass]="panelClass">
-      <div class="panel-heading" (click)="toggleOpen($event)">
-        <h4 class="panel-title">
+    <div class="card" [ngClass]="cardClass">
+      <div class="card-header" (click)="toggleOpen($event)">
+        <h4 class="card-title">
           <a href tabindex="0" class="accordion-toggle">
             <span *ngIf="heading" [ngClass]="{'text-muted': isDisabled}">{{heading}}</span>
             <ng-content select="[accordion-heading]"></ng-content>
           </a>
         </h4>
       </div>
-      <div class="panel-collapse collapse" [collapse]="!isOpen">
-        <div class="panel-body">
+      <div class="collapse" [collapse]="!isOpen">
+        <div class="card-block">
           <ng-content></ng-content>
         </div>
       </div>
     </div>
   `
 })
-export class AccordionPanelComponent implements OnInit, OnDestroy {
+export class AccordionCardComponent implements OnInit, OnDestroy {
   @Input() public heading:string;
-  @Input() public panelClass:string;
+  @Input() public cardClass:string;
   @Input() public isDisabled:boolean;
 
-  // Questionable, maybe .panel-open should be on child div.panel element?
-  @HostBinding('class.panel-open')
+  // Questionable, maybe .card-open should be on child div.card element?
+  @HostBinding('class.card-open')
   @Input()
   public get isOpen():boolean {
     return this._isOpen;
@@ -43,7 +43,7 @@ export class AccordionPanelComponent implements OnInit, OnDestroy {
   public set isOpen(value:boolean) {
     this._isOpen = value;
     if (value) {
-      this.accordion.closeOtherPanels(this);
+      this.accordion.closeOtherCards(this);
     }
   }
 
@@ -55,7 +55,7 @@ export class AccordionPanelComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit():any {
-    this.panelClass = this.panelClass || 'panel-default';
+    this.cardClass = this.cardClass || 'card-default';
     this.accordion.addGroup(this);
   }
 
